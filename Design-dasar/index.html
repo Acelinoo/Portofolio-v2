@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <!-- Google Font -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <script>
+        window.onload = function () {
+            const loader = document.getElementById('loading-screen');
+            const mainContent = document.getElementById('main-content');
+            const navbar = document.getElementById('navbar');
+            const sidebar = document.getElementById('sidebar');
+            const about = document.getElementById('about');
+            const certificateSlider = document.getElementById('certificate-slider');
+            const myworks = document.getElementById('works'); // Add this line
+
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    mainContent.style.opacity = '1';
+                    navbar.style.top = '10px';
+                    navbar.style.opacity = '1'; // Navbar muncul
+                    sidebar.style.right = '0'; // Sidebar muncul
+                    about.style.opacity = '1'; // About muncul
+                    about.style.transform = 'translateY(0)'; // Efek slide ke atas selesai
+                    certificateSlider.style.opacity = '1'; // Sertifikat slider muncul
+
+                    // Make container-works visible and slide in
+                    myworks.style.opacity = '1';
+                    myworks.style.transform = 'translateY(0)'; // Slide in effect
+                }, 1000);
+            }, 3000);
+        };
+
+
+
+
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', function () {
+            const navbar = document.getElementById('navbar');
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (currentScroll > lastScrollTop) {
+                // Scroll ke bawah, sembunyikan navbar
+                navbar.style.top = '-100px';
+            } else {
+                // Scroll ke atas, tampilkan navbar
+                navbar.style.top = '10px';
+            }
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // Pastikan nilai tidak negatif
+        });
+        let scrollSpeed = 0.5; // Atur kecepatan scroll (semakin kecil, semakin lambat)
+        let scrollPosition = 0;
+
+        window.addEventListener('wheel', (event) => {
+            event.preventDefault(); // Mencegah scroll default
+            scrollPosition += event.deltaY * scrollSpeed; // Atur kecepatan scroll
+            scrollPosition = Math.max(0, scrollPosition); // Jangan biarkan scroll ke nilai negatif
+
+            // Scroll pelan-pelan
+            window.scrollTo({
+                top: scrollPosition,
+                behavior: 'smooth', // Membuat transisi halus
+            });
+        }, { passive: false });
+        const slider = document.querySelector('.slider');
+
+        slider.addEventListener('mouseover', () => {
+            slider.style.animationPlayState = 'paused';
+        });
+
+        slider.addEventListener('mouseout', () => {
+            slider.style.animationPlayState = 'running';
+        });
+
+    </script>
+    <style>
+        /* Animasi Fade-in untuk Loading Screen */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Animasi roket terbang */
+        @keyframes rocketFly {
+            0% {
+                transform: translateY(100vh);
+            }
+
+            100% {
+                transform: translateY(-100px);
+            }
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            color: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            font-size: 32px;
+            font-weight: 600;
+            text-transform: uppercase;
+            animation: fadeIn 1s ease-in;
+            transition: opacity 1s ease-out;
+        }
+
+        /* Animasi garis bawah untuk loading screen */
+        @keyframes loadingUnderlineAnimation {
+            0% {
+                width: 0;
+            }
+
+            50% {
+                width: 100%;
+            }
+
+            100% {
+                width: 0;
+            }
+        }
+
+        /* Garis bawah animasi untuk loading screen */
+        #loading-line {
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #000;
+            animation: loadingUnderlineAnimation 5s infinite;
+        }
+
+        /* Gambar Roket */
+        #rocket {
+            position: absolute;
+            bottom: 20px;
+            animation: rocketFly 3s ease-in-out forwards;
+        }
+
+        /* Main Content */
+
+        #main-content {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            top: 100px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #ffffff;
+            color: #000000;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* Navbar */
+        #navbar {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #33333300;
+            color: rgb(0, 0, 0);
+            border-radius: 25px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            width: auto;
+            z-index: 5;
+            opacity: 0;
+            /* Tambahkan ini */
+            transition: top 0.5s ease, opacity 0.5s ease;
+            /* Tambahkan opacity di sini */
+        }
+
+
+
+        /* Link di Navbar */
+        #navbar a {
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        /* Efek hover pada link navbar */
+        #navbar a:hover {
+            color: #2d2d2d;
+            transform: translateY(-5px);
+        }
+
+        /* Sidebar */
+        #sidebar {
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 30%;
+            right: -250px;
+            /* Menyembunyikan sidebar pada awal */
+            width: 50px;
+            height: 30%;
+            border-radius: 20px;
+            background-color: #00000000;
+            color: #fff;
+            transition: right 0.5s ease;
+            z-index: 15;
+            padding-top: 60px;
+        }
+
+        #sidebar a {
+            display: flex;
+            /* Tambahkan ini untuk membuat konten di tengah */
+            align-items: center;
+            /* Pusatkan secara vertikal */
+            justify-content: center;
+            /* Pusatkan secara horizontal */
+            padding: 10px 15px;
+            text-decoration: none;
+            text-align: center;
+            color: #ffffff;
+            font-size: 20px;
+            transition: background-color 0.3s;
+        }
+
+
+        /* Efek Zoom pada ikon sidebar saat hover */
+        #sidebar a img {
+            width: 20px;
+            /* Ukuran ikon normal */
+            height: auto;
+            transition: transform 0.3s ease, width 0.3s ease;
+        }
+
+        #sidebar a:hover img {
+            transform: scale(1.2);
+            /* Zoom in saat hover */
+            width: 25px;
+            /* Ukuran ikon yang diperbesar */
+        }
+
+        /* Gambar Profil */
+        #profile-img {
+            width: 300px;
+            height: auto;
+            object-fit: cover;
+            transition: transform 0.3s ease-in-out;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Gambar Acel di belakang */
+        #profile-img-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300px;
+            height: auto;
+            object-fit: cover;
+            z-index: 1;
+            opacity: 0.4;
+        }
+
+        /* Efek zoom pada gambar saat hover */
+        #profile-img:hover {
+            transform: scale(1.2);
+        }
+
+        /* Teks Profil */
+        #text-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* justify-content: center; */
+            text-align: center;
+            font-size: 74px;
+            font-weight: bold;
+            line-height: 1.2;
+            margin-left: 50px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+
+        :root {
+            interpolate-size: allow-keywords;
+        }
+
+        nav {
+            display: flex;
+        }
+
+        nav a {
+            white-space: nowrap;
+            width: 2.5rem;
+            overflow-x: clip;
+            transition: width 0.35s ease;
+
+            &:hover,
+            &:focus-visible {
+                width: max-content;
+            }
+        }
+
+        @layer layout {
+            * {
+                box-sizing: border-box;
+            }
+
+            html {
+                background: white;
+            }
+
+            html,
+            body {
+                height: 100%;
+            }
+
+            body {
+                display: grid;
+                place-content: center;
+            }
+
+            nav ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+
+                border: none;
+                padding: 0.5rem 0;
+                overflow-x: visible;
+
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+
+                width: 4.5rem;
+                padding: 1rem;
+            }
+
+            nav ul {
+                a {
+                    display: grid;
+                    grid-template-columns: 1.5rem auto;
+                    gap: 1rem;
+                    padding: 0.5rem;
+                    font-size: 1rem;
+                    transition-duration: 0.25s;
+                    align-items: center;
+                    background: #eaeaea00;
+                    border-radius: 0.5rem;
+                    color: #000000;
+                    text-decoration: none;
+
+                    &:hover,
+                    &:focus-visible {
+                        background: rgba(211, 211, 211, 0);
+                        color: #333;
+                    }
+                }
+            }
+
+            .text {
+                padding-right: 0.75rem;
+                font-family: "Open Sans", sans-serif;
+                font-optical-sizing: auto;
+                font-weight: 500;
+            }
+        }
+
+
+
+        /* Animasi garis bawah untuk tag p */
+        @keyframes underlineAnimation {
+            0% {
+                width: 0;
+            }
+
+            50% {
+                width: 100%;
+            }
+
+            100% {
+                width: 0;
+            }
+        }
+
+        /* Efek Garis Bawah pada p */
+        #text-content p {
+            display: inline-block;
+            position: relative;
+            font-size: large;
+        }
+
+        #text-content p::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #000;
+            animation: underlineAnimation 5s infinite;
+        }
+
+        /* Styling untuk About Me */
+        #about {
+            padding: 20px;
+            margin-top: 40px;
+            max-width: 800px;
+            text-align: justify;
+            margin: 0 auto;
+            opacity: 0;
+            /* Tambahkan ini untuk menyembunyikan saat awal */
+            transform: translateY(20px);
+            /* Tambahkan efek slide ke atas */
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            /* Transisi smooth */
+        }
+
+        #about h2 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        #about p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Efek Zoom pada ikon sidebar saat hover */
+
+        #about-img {
+            width: 260px;
+            height: auto;
+            object-fit: cover;
+            transition: transform 0.3s ease-in-out;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Gambar Acel di belakang */
+        #about-img-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: auto;
+            object-fit: cover;
+            z-index: 1;
+            opacity: 0.4;
+        }
+
+        /* Efek zoom pada gambar saat hover */
+        #about-img:hover {
+            transform: scale(1.2);
+        }
+
+        .anchor {
+            anchor-name: --over-easy;
+            margin-left: -50px;
+        }
+
+        .about-img-container {
+            position: fixed;
+            position-anchor: --over-easy;
+            position-area: right;
+        }
+
+        #certificate-slider {
+            overflow: hidden;
+            margin-bottom: 150px;
+            width: 95%;
+            height: 200px;
+            position: relative;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            /* Transisi muncul */
+        }
+
+        .slider {
+
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            animation: scroll 20s linear infinite;
+        }
+
+        .card {
+            flex: 0 0 200px;
+            margin-top: 0;
+            margin: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .card p {
+            margin: 10px 0 0;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .card:hover {
+            transform: scale(1.1);
+        }
+
+        @supports selector(::details-content) {
+            .warning {
+                display: none;
+            }
+        }
+
+        .accordion-wrapper {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            width: min-content;
+            margin: 0 auto;
+        }
+
+        details {
+            display: flex;
+            flex-direction: row;
+
+            background: transparent;
+            color: white;
+
+            height: 30rem;
+            border-radius: 2rem;
+            overflow: hidden;
+
+            /* To make the image work …*/
+            position: relative;
+            z-index: 1;
+
+            --open-size: min(30vw, 300px);
+
+            /* Hide marker */
+            ::marker {
+                content: '';
+            }
+
+            /* The image is tucked in the summary, because otherwise it would be hidden when not [open] as it ends up in the ::details-content pseudo */
+            summary img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+
+                z-index: -1;
+                transition: filter 0.5s ease;
+            }
+
+            /* Animate the image */
+            &[open] summary img {
+                filter: brightness(0.5);
+            }
+
+            summary {
+                padding: 1rem 1em;
+                width: 5rem;
+                flex-shrink: 0;
+                /* Prevent shrinking */
+                text-align: center;
+
+                span {
+                    display: grid;
+                    place-content: center;
+                    width: 100%;
+                    aspect-ratio: 1;
+                    border-radius: 50%;
+                    background: rgb(0 0 0 / 0.25);
+                }
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            .details-content-wrapper {
+                padding: 1.5rem 1em;
+                width: var(--open-size);
+            }
+
+            &:hover,
+            &:has(summary:focus) {
+                outline: 3px solid cadetblue;
+                outline-offset: 3px;
+            }
+        }
+
+        .details-content-wrapper {
+
+            /* We need margin-trim … */
+            :first-child {
+                margin-top: 0;
+            }
+
+            :last-child {
+                margin-bottom: 0;
+            }
+
+            /* Animate-in the text when open */
+            p {
+                transform: translateY(2rem);
+                opacity: 0;
+                transition: all 0.5s ease;
+                transition-delay: 0.5s;
+            }
+
+            [open] & p {
+                transform: none;
+                opacity: 1;
+                transition-delay: 0.5s;
+            }
+        }
+
+        /* Animation */
+        ::details-content {
+            transition: width 0.5s ease, content-visibility 0.5s ease allow-discrete;
+            width: 0;
+        }
+
+        [open]::details-content {
+            width: var(--open-size);
+        }
+
+        @layer reset {
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                height: 100%;
+            }
+
+            html {
+                font-size: 14px;
+            }
+        }
+
+        @layer baselayout {
+            html {
+                background: white;
+                color: #444;
+                font-family: system-ui;
+                line-height: 1.42;
+
+                overscroll-behavior-x: none;
+                overflow: auto;
+            }
+
+            .container-works {
+                max-width: 90ch;
+                display: flex;
+                align-items: center;
+                margin: 0 auto;
+                padding-bottom: 10rem;
+            }
+
+            p {
+                margin-bottom: 1em;
+            }
+
+            h1,
+            h2 {
+                margin: 4em 0 1em;
+            }
+
+            h3 {
+                margin: 1em 0 0.5em;
+            }
+
+            #demo {
+                padding: 1em;
+
+                background: #ffffff;
+            }
+        }
+
+        @layer code {
+            pre {
+                border: 1px solid #ffffff;
+                padding: 1em;
+                background: #f7f7f7;
+                font-family: "Courier 10 Pitch", Courier, monospace;
+                overflow-x: auto;
+                border-left: 0.4em solid cornflowerblue;
+                tab-size: 4;
+            }
+
+            code:not(pre code) {
+                background: #f7f7f7;
+                border: 1px solid rgb(0 0 0 / 0.2);
+                padding: 0.1rem 0.3rem;
+                margin: 0.1rem 0;
+                border-radius: 0.2rem;
+                /*      display: inline-block; */
+                -webkit-box-decoration-break: clone;
+                white-space: pre-wrap;
+            }
+        }
+
+        @layer warning {
+            .warning {
+                box-sizing: border-box;
+                padding: 1em;
+                margin: 1em 0;
+                border: 1px solid #ccc;
+                background: rgba(255 255 205 / 0.8);
+            }
+
+            .warning> :first-child {
+                margin-top: 0;
+            }
+
+            .warning> :last-child {
+                margin-bottom: 0;
+            }
+
+            .warning a {
+                color: blue;
+            }
+
+            .warning--info {
+                border: 1px solid #123456;
+                background: rgb(205 230 255 / 0.8);
+            }
+
+            .warning--alarm {
+                border: 1px solid red;
+                background: #ff000010;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="scroller">
+            <div class="content">
+
+            </div>
+        </div>
+        <div id="controls">
+            <label for="scrollbar-color-thumb">Thumb Color:</label>
+            <input type="color" id="scrollbar-color-thumb" value="#FF69B4">
+            <label for="scrollbar-color-track">Track Color:</label>
+            <input type="color" id="scrollbar-color-track" value="#0000FF">
+        </div>
+        </div>
+        <!-- Loading Screen -->
+        <div id="loading-screen">
+            <div>
+                <div style="font-size: 40px; text-align: center;">
+                    I Am Junior Web Developer
+                    <div id="loading-line"></div>
+                </div>
+                <!-- Gambar Roket -->
+                <img id="rocket" src="/Design-dasar/halo.png" alt="Rocket" width="80px">
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <a href="#"><img src="/Design-dasar/github.svg" alt=""></a>
+            <a href="#"><img src="/Design-dasar/instagram.svg" alt=""></a>
+            <a href="#"><img src="/Design-dasar/linkedin.svg" alt=""></a>
+            <a href="#"><img src="/Design-dasar/tiktok.svg" alt=""></a>
+            <a href="#"><img src="/Design-dasar/gmail.png" alt=""></a>
+        </div>
+
+        <!-- Navbar -->
+        <div id="navbar">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#works">Works</a>
+        </div>
+        <div class="container">
+            <br>
+            <div id="main-content" style="margin-top: 150%;">
+                <!-- Gambar Profil -->
+                <div style="position: relative; margin-top: 10%;">
+                    <!-- Gambar Acel di belakang -->
+                    <img id="profile-img-back" style="margin-top: 25px; margin-left: 25px;" src="/Design-dasar/acel.jpg"
+                        alt="Profile Back">
+                    <!-- Gambar Acel di depan -->
+                    <img id="profile-img" src="/Design-dasar/acel.jpg" alt="Profile">
+                </div>
+
+                <!-- Teks Profil -->
+                <div id="text-content" style="margin-top: 10%;">
+                    MARCHELINO<br>KURNIAWAN
+                    <br>
+                    <nav>
+                        <p style="font-size: large; ">JUNIOR WEB DEVELOPER</p>
+                        <ul>
+                            <li value="reply">
+                                <a href="#about">
+                                    <i class="fa-solid fa-angles-down"></i>
+
+                                    <span class="text">Scroll Down</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+            <div id="about">
+                <div class="anchor">
+                    <h2>About Me</h2>
+                    <p>
+                        Hi there, I'm Marchelino Kurniawan. A junior web developer with over 3 years of experience. I'm
+                        currently pursuing my studies at Universitas Komputer Indonesia. I've been honing my coding
+                        skills
+                        since high school (SMK in Indonesian). I have a passion for learning new technologies. If you
+                        need
+                        assistance or are looking to collaborate on a project, feel free to reach out.
+                    </p>
+
+                </div>
+                <div style="margin-left: 50px; margin-top: 95px;" class="about-img-container">
+                    <!-- Gambar Acel di belakang -->
+                    <img id="about-img-back" style="margin-top: 25px; margin-left: 25px;" src="/Design-dasar/acel-2.png"
+                        alt="Profile Back">
+                    <!-- Gambar Acel di depan -->
+                    <img id="about-img" src="/Design-dasar/acel-2.png" alt="Profile">
+                </div>
+
+            </div>
+        </div>
+        <div id="certificate-slider">
+            <h3>Certifications</h3>
+            <div class="slider">
+                <div class="card">
+                    <a href="/Design-dasar/cartificat-1.jpg">
+
+                        <img src="/Design-dasar/cartificat-1.jpg" alt="Sertifikat 1">
+                    </a>
+                    <p>Learn Basic Web Programming</p>
+                </div>
+                <div class="card">
+                    <a href="/Design-dasar/cartificat-1.jpg">
+
+                        <img src="/Design-dasar/cartificat-1.jpg" alt="Sertifikat 1">
+                    </a>
+                    <p>Learn Basic Web Programming</p>
+                </div>
+                <div class="card">
+                    <a href="/Design-dasar/cartificat-1.jpg">
+
+                        <img src="/Design-dasar/cartificat-1.jpg" alt="Sertifikat 1">
+                    </a>
+                    <p>Learn Basic Web Programming</p>
+                </div>
+
+            </div>
+        </div>
+        </div>
+        <div class="works" id="works"
+            style="margin-left: 0px; opacity: 0; transform: translateY(20px); transition: opacity 1s, transform 1s;">
+            <h3>My Works</h3>
+            <div class="container-works">
+
+                <div id="demo">
+                    <div class="accordion-wrapper">
+                        <details name="accordion" id="boating" open>
+                            <summary>
+                                <span style="font-weight: bold; font-size: 10px;">Web</span>
+                                <img draggable=false src="/Design-dasar/NeoNest.png" alt="">
+                            </summary>
+                            <div class="details-content-wrapper">
+                                <h3>NeoNest</h3>
+                                <p>NeoNest is a service platform that is fast, efficient, secure, and hassle-free,
+                                    designed to meet your needs easily and reliably.</p>
+                            </div>
+                        </details>
+                        <details name="accordion" id="anchoring">
+                            <summary>
+                                <span>-</span>
+                                <img draggable=false src="/Design-dasar/acel-2.png" alt="">
+                            </summary>
+                            <div class="details-content-wrapper">
+                                <h3>Anchoring</h3>
+                                <p>Ahoy league hands Sea Legs keelhaul salmagundi fire ship crimp Privateer galleon.
+                                    Booty boom yard boatswain quarter.</p>
+                            </div>
+                        </details>
+                        <details name="accordion" id="fishing">
+                            <summary>
+                                <span>-</span>
+                                <img draggable=false src="/Design-dasar/acel-2.png" alt="">
+                            </summary>
+                            <div class="details-content-wrapper">
+                                <h3>-</h3>
+                                <p>No prey, no pay heave down splice the main brace furl cable snow walk the plank chase
+                                    guns piracy bucko.</p>
+                            </div>
+                        </details>
+                        <details name="accordion" id="lighthouses">
+                            <summary>
+                                <span>-</span>
+                                <img draggable=false src="/Design-dasar/acel-2.png" alt="">
+                            </summary>
+                            <div class="details-content-wrapper">
+                                <h3>-</h3>
+                                <p>Deadlights squiffy salmagundi cable pinnace parrel topsail Corsair Arr mizzenmast.
+                                </p>
+                            </div>
+                        </details>
+                        <details name="accordion" id="reefs">
+                            <summary>
+                                <span>-</span>
+                                <img draggable=false src="/Design-dasar/acel-2.png" alt="">
+                            </summary>
+                            <div class="details-content-wrapper">
+                                <h3>Reefs</h3>
+                                <p>Keel yard poop deck brigantine gaff six pounders bring a spring
+                                    upon her cable interloper lad pink.</p>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+
+            </div>
+
+</body>
+
+</html>
